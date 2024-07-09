@@ -1,0 +1,108 @@
+[
+    {
+        "shape": "CuCuCuCu",
+        "required": 30
+    },
+    {
+        "shape": "----CuCu",
+        "required": 40
+    },
+    {
+        "shape": "RuRuRuRu",
+        "required": 70
+    },
+    {
+        "shape": "RuRu----",
+        "required": 70
+    },
+    {
+        "shape": "Cu----Cu",
+        "required": 170
+    },
+    {
+        "shape": "Cu------",
+        "required": 270
+    },
+    {
+        "shape": "CrCrCrCr",
+        "required": 300
+    },
+    {
+        "shape": "RbRb----",
+        "required": 480
+    },
+
+    {
+        "shape": "CpCpCpCp",
+        "required": 600
+    },
+    {
+        "shape": "ScScScSc",
+        "required": 800
+    },
+    {
+        "shape": "CgScScCg",
+        "required": 1000
+    },
+    {
+        "shape": "CbCbCbRb:CwCwCwCw",
+        "required": 1000
+    },
+    {
+        "shape": "RpRpRpRp:CwCwCwCw",
+        "required": 3800
+    },
+    {
+        "shape": "--Cg----:--Cr----",
+        "required": 8,
+        "throughputOnly": true
+    },
+    {
+        "shape": "SrSrSrSr:CyCyCyCy",
+        "required": 10000
+    },
+    {
+        "shape": "SrSrSrSr:CyCyCyCy:SwSwSwSw",
+        "required": 6000
+    },
+    {
+        "shape": "CbRbRbCb:CwCwCwCw:WbWbWbWb",
+        "required": 20000
+    },
+    {
+        "shape": "Sg----Sg:CgCgCgCg:--CyCy--",
+        "required": 20000
+    },
+    {
+        "shape": "CpRpCp--:SwSwSwSw",
+        "required": 25000
+    },
+    {
+        "shape": "RuCw--Cw:----Ru--",
+        "required": 25000
+    },
+    {
+        "shape": "CrCwCrCw:CwCrCwCr:CrCwCrCw:CwCrCwCr",
+        "required": 25000
+    },
+    {
+        "shape": "Cg----Cr:Cw----Cw:Sy------:Cy----Cy",
+        "required": 25000
+    },
+    {
+        "shape": "CcSyCcSy:SyCcSyCc:CcSyCcSy",
+        "required": 25000
+    },
+    {
+        "shape": "CcRcCcRc:RwCwRwCw:Sr--Sw--:CyCyCyCy",
+        "required": 25000
+    },
+    {
+        "shape": "Rg--Rg--:CwRwCwRw:--Rg--Rg",
+        "required": 25000
+    },
+    {
+        "shape": "CbCuCbCu:Sr------:--CrSrCr:CwCwCwCw",
+        "required": 50000
+    }
+]

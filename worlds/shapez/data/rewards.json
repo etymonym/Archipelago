@@ -1,0 +1,52 @@
+{
+    "balancer": [
+        "base",
+        "merger",
+        "splitter"
+    ], 
+    "tunnel": [
+        "base",
+        "tier_2"
+    ], 
+    "extractors": [
+        "base",
+        "chainable"
+    ],
+    "cutter": [
+        "base",
+        "quad"
+    ], 
+    "rotater": [
+        "base",
+        "ccw",
+        "180"
+    ], 
+    "painter": [
+        "base",
+        "double",
+        "quad"
+    ], 
+    "wires": [
+        "base",
+        "crossing",
+        "switch",
+        "constant",
+        "display",
+        "logic_gates",
+        "transistor",
+        "virtual_processing",
+        "analyzer",
+        "comparer"
+    ],
+    "storage": [
+        "base",
+        "energy_link"
+    ],
+    "trash": "trash", 
+    "mixer": "mixer", 
+    "stacker": "stacker", 
+    "belt_reader": "belt_reader", 
+    "filter": "filter",
+    "blueprints": "blueprints",
+    "freeplay": "freeplay"
+}

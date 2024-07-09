@@ -2,8 +2,8 @@
 from Options import Option, Choice, Range, NamedRange, Toggle, DefaultOnToggle
 
 class Goal(NamedRange):
-    """The level that needs to be finished in order for 
-    the game to be considered completed.
+    """
+    The level that needs to be finished in order for the game to be considered completed.
     """
     display_name = "Goal"
     range_start = 1
@@ -12,14 +12,119 @@ class Goal(NamedRange):
 
     special_range_names = {
         "blueprint%": 12,
-        "freeplay%": 26,
+        "reward%": 26,
+    }
+
+class GoalLevelRewardDifference(Choice):
+    """
+    How to deal with any difference in the Goal Level and number of Rewards ( currently 26 + 4x max upgrade tier).
+    Starting Rewards: This setting will only assign random rewards to levels up to the goal level \
+    and will give the remaining rewards to the player to start with.
+    Post Game: This setting simply assigns one reward to one level, meaning that if the chosen goal level \
+    is below the number of rewards then remaining items that are randomized into levels greater than the goal level, \
+    checking ( or releasing ) those levels may be required for other games' to complete their goals -- \
+    of course, if the multiworld is set to "release on goal" then these levels will automatically release on goal.
+    Reward Bundling: This setting bundles rewards so that individual checks will send multiple rewards at once; \
+    this means there will be a number of checks exactly equal to the goal level + 4x max upgrade tier \
+    ( if upgrade tiers are included in the item pool ).
+    """
+    display_name = "Goal Level vs Reward Total"
+    option_starting_rewards = 0
+    option_post_game = 1
+    option_reward_bundling = 2
+
+class BlueprintCostMultiplier(NamedRange):
+    """
+    What the multiplier on the cost ( in blueprints ) for paste operations should be.
+    """
+    range_start = 0
+    range_end = 10
+    default = 1
+
+    special_range_names = {
+        "free": 0,
+        "vanilla": 1
     }
 
 
+class RandomizeBlueprintShape(Choice):
+    """
+    If the Blueprint shape should be randomized and if so, how to randomize the shape.
+    Vanilla: The blueprint shape is not randomized.
+    Shuffled: The vanilla blueprint's layers, quadrants, and colors are shuffled.
+    Analogous: A shape with the same "complexity" as the blueprint will be generated to replace the blueprint shape. \
+    E.g. RgRgRgCg:RwRwRwRw, RyCyCyCy:CcCcCcCc, CrCrRrCr:RwRwRwRw, RpCpRpRp:RyRyRyRy
+    Random: A totally random shape is chosen as the blueprint shape.
+    """
+    option_vanilla = 0
+    option_shuffled = 1
+    option_analogous = 2
+    option_random = 3
+
+class StartWithBluePrints(DefaultOnToggle):
+    """
+    Whether or not to start with the ability to Copy/Paste parts of your factory.
+    This setting does not effect the cost of Copy/Pasting ( i.e. if the cost multiplier is not 0, you must still pay \
+    even with this setting on )
+    """
+    display_name = "Start with Blueprints"
+
+
+
+class ProgressiveBalancers(DefaultOnToggle):
+    """
+    Whether or not to merge Balancers, Mergers, and Splitters into "Progressive Balancers" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Balancers"
+
+class ProgressiveTunnels(DefaultOnToggle):
+    """
+    Whether or not to merge the two Tunnel tiers into "Progressive Tunnels" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Tunnels"
+
+class ProgressiveExtractors(DefaultOnToggle):
+    """
+    Whether or not to merge Extractors and Chained Extractors into "Progressive Extractors" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Extractors"
+
+class ProgressiveCutters(DefaultOnToggle):
+    """
+    Whether or not to merge Cutters and Quad Cutters into "Progressive Cutters" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Cutters"
+
+class ProgressiveRotators(Toggle):
+    """
+    Whether or not to merge Rotator (CW), Rotator (CCW), and Rotator (180°) into "Progressive Rotators" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Rotators"
+
+class ProgressivePainters(DefaultOnToggle):
+    """
+    Whether or not to merge Painters, Double Painters, and Quad Painters into "Progressive Painters" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Painters"
+
+class ProgressiveWires(DefaultOnToggle):
+    """
+    Whether or not to merge Wires, Constant Signal, Display, Logic Gates, and Virtual Processing into "Progressive Wires" \
+    so that each is awarded in order.
+    """
+    display_name = "Progressive Wires"
+
 class LevelTotalAndThroughput(NamedRange):
-    """Percent chance that a given level has a throughput requirement\
+    """
+    Percent chance that a given level has a throughput requirement \
     ( versus a total amount requirement -- each level is one or the other )
-    E.g. a value of 30 would mean that each level would have a 70% of having a total requirement\
+    E.g. a value of 30 would mean that each level would have a 70% of having a total requirement \
     and a 30% of a throughput requirement instead. 
     """
     display_name = "Total Amount vs Throughput"
@@ -302,6 +407,7 @@ class UpgradeTierShapesTotalsRamping(Choice):
     Ramping Per Upgrade: An upgrade's tiers must have their sum total ( the sum of all distinct shape totals ) fall between the previous subsequent tiers' sum totals. \
     E.g. An upgrade's tier 2 must have a sum total >= that upgrade's tier 1 sum total, and <= that upgrade's tier 3 sum total.
     Full Ramping: Both Ramping Per Tier and Per Upgrade.
+    Random: Each upgrade tier's distinct shapes can have any total as long as the tier's sum total is in the range of the minimum and maximum.
     """
     display_name = "Upgrade Tiers: Ramping Shape Totals"
 
@@ -316,48 +422,130 @@ class UpgradeTierRandomChoice(Choice):
     option_ramping_per_upgrade = 2
     option_full_ramping = 3
     
-class RandomUpgradeTierTotalQuadrants(UpgradeTierRandomChoice):
+class UpgradeTierTotalQuadrants(UpgradeTierRandomChoice):
     """
     Vanilla: Upgrade Tier's shapes have the same total quadrants as in the base game.
-    Ramping Per Tier: Each tier will have the range that the difficulty* of each distinct shape's total number of quadrants must fall inbetween \
-    determined by their first and last shape's total quadrants. \
-    E.g. An upgrade tier's cost that has three distinct shapes, would obligate the second shape's total quadrants difficulty* to fall somewhere between the first shape \
-    and the third shape's total quadrant difficulty.
-    Ramping Per Upgrade: An upgrade's tiers must have their lowest and highest total quadrant difficulty be >= the previous tiers' lowest and highest total quadrant difficulty. \
-    E.g. An upgrade's tier 2 must have a sum total >= that upgrade's tier 1 sum total, and <= that upgrade's tier 3 sum total.
+    Ramping Per Tier: Each tier will have the range that the TQD of each distinct shape must fall between \
+    determined by their first and last shape's TQD. \
+    E.g. An upgrade tier's cost that has three distinct shapes, would obligate the second shape's total quadrants difficulty* (TQD) \
+    to fall somewhere between the first shape and the third shape's TQD.
+    Ramping Per Upgrade: An upgrade's tiers must have their lowest and highest TQD be >= the previous tiers' lowest and highest TQD respectively,\
+    and they must also be <= the next tier's lowest and highest TQD, respectively. \
+    E.g. An upgrade's tier 2 must have its lowest TQD >= that upgrade's TQD for tier 1, and <= that upgrade's tier 3 TQD.
     Full Ramping: Both Ramping Per Tier and Per Upgrade.
+    Random: Each tier's shapes can have 1, 2, 3, or 4 quadrants.
 
-    Ramping: Upgrade Tier's shapes have a total number of quadrants of ramping difficulty*.
-    Random: Every Upgrade Tier's shape can have 1,2,3, or 4 total quadrants.
-    * This is not the same as "numerical ramping". Specifically the ramping goes 4 -> 2 -> 1 -> 3. \
+    * Total Quadrant Difficulty (TQD) ramping is not the same as "numerical ramping". Specifically the ramping goes 4 -> 2 -> 1 -> 3. \
     This is because 4 is ( theoretically ) able to be satisfied with no Cutter / Stacker, \
     2 always requires at least a single Cutter pass, 1 always requires at least two Cutter passes, \
     and 3 always requires both a Cutter and a Stacker pass at least.
     """
     display_name = "Upgrade Tiers: Total Quadrants"
 
-class RandomLevelTotalLayers(UpgradeTierRandomChoice):
+class UpgradeTierTotalLayers(UpgradeTierRandomChoice):
     """
-    Vanilla: Levels have the same total layers as in the base game.
-    Ramping: Levels have a total number of layers that ramp up.
+    Vanilla: Upgrade Tier's shapes have the same total layers as in the base game.
+    Ramping Per Tier: Each tier will have the range that the total layers of each distinct shape must fall between \
+    determined by their first and last shape's total layers. \
+    E.g. An upgrade tier's cost that has three distinct shapes, would obligate the second shape's total layers to fall somewhere between the first shape \
+    and the third shape's total layers.
+    Ramping Per Upgrade: An upgrade's tiers must have their lowest and highest total layers be >= the previous tiers' lowest and highest total layers respectively,\
+    and they must also be <= the next tier's lowest and highest total layers, respectively. \
+    E.g. An upgrade's tier 2 must have its lowest and highest total layers >= that upgrade's lowest and highest total layers for tier 1 respectively, \
+    and <= that upgrade's tier 3 lowest and highest total layers respectively.
+    Full Ramping: Both Ramping Per Tier and Per Upgrade.
     Random: Every level can have 1,2,3, or 4 total layers.
     """
     display_name = "Upgrade Tiers: Total Layers"
 
-class RandomLevelTotalSubshapes(UpgradeTierRandomChoice):
+class UpgradeTierTotalSubshapes(UpgradeTierRandomChoice):
     """
-    Vanilla: Levels have the same total subshapes as in the base game.
-    Ramping: Levels have a total number of subshapes that ramp up ( clamped by 4x their total layers ).
-    Random: Every level can have subshapes totalling between their total layers and 4x their total layers .
+    Vanilla: Upgrade Tier's shapes have the same total subshapes as in the base game.
+    Ramping Per Tier: Each tier will have the range that the total subshapes of each distinct shape must fall between \
+    determined by their first and last shape's total subshapes. \
+    E.g. An upgrade tier's cost that has three distinct shapes, would obligate the second shape's total subshapes to fall somewhere between the first shape \
+    and the third shape's total subshapes.
+    Ramping Per Upgrade: An upgrade's tiers must have their lowest and highest total subshapes be >= the previous tiers' lowest and highest total subshapes respectively,\
+    and they must also be <= the next tier's lowest and highest total subshapes, respectively. \
+    E.g. An upgrade's tier 2 must have its lowest and highest total subshapes >= that upgrade's lowest and highest total subshapes for tier 1 respectively, \
+    and <= that upgrade's tier 3 lowest and highest total subshapes respectively.
+    Full Ramping: Both Ramping Per Tier and Per Upgrade.
+    Random: Every level can have subshapes totalling between their total layers and 4x their total layers.
+
+    All subshape amounts are clamped by a shape's total layers.
     """
     display_name = "Upgrade Tiers: Total Quadrants"
 
-class RandomLevelTotalColors(UpgradeTierRandomChoice):
+class UpgradeTierTotalColors(UpgradeTierRandomChoice):
     """
-    Vanilla: Levels have the same total colors* as in the base game.
-    Ramping: Levels have a total number of colors* that ramp up.
-    Random: Every level can have between 1 and 8 total colors* ( clamped by the total number of subshapes ).
+    Vanilla: Upgrade Tier's shapes have the same total colors as in the base game.
+    Ramping Per Tier: Each tier will have the range that the total colors* of each distinct shape must fall between \
+    determined by their first and last shape's total colors*. \
+    E.g. An upgrade tier's cost that has three distinct shapes, would obligate the second shape's total colors to fall somewhere between the first shape \
+    and the third shape's total colors*.
+    Ramping Per Upgrade: An upgrade's tiers must have their lowest and highest total colors* be >= the previous tiers' lowest and highest total colors* respectively,\
+    and they must also be <= the next tier's lowest and highest total colors*, respectively. \
+    E.g. An upgrade's tier 2 must have its lowest and highest total colors* >= that upgrade's lowest and highest total colors* for tier 1 respectively, \
+    and <= that upgrade's tier 3 lowest and highest total subshapes respectively.
+    Full Ramping: Both Ramping Per Tier and Per Upgrade.
+    Random: Every level can have between 1 and 8 total colors*.
+
+    All color amounts are clamped by a shape's total subshapes.
     * "Uncolored" is counted as a color.
     """
     display_name = "Upgrade Tiers: Total Colors"
 
+
+shapez_options: typing.Dict[str, type(Option)] = {
+    "goal": Goal,
+    "blueprint_cost_multiplier": BlueprintCostMultiplier,
+    "randomize_blueprint_shape": RandomizeBlueprintShape,
+    "start_with_blueprints": StartWithBluePrints,
+    "goal_level_reward_difference": GoalLevelRewardDifference,
+    "progressive_balancers": ProgressiveBalancers,
+    "progressive_tunnels": ProgressiveTunnels,
+    "progressive_extractors": ProgressiveExtractors,
+    "progressive_cutters": ProgressiveCutters,
+    "progressive_rotators": ProgressiveRotators,
+    "progressive_painters": ProgressivePainters,
+    "progressive_wires": ProgressiveWires,
+    "level_total_and_throughput": LevelTotalAndThroughput,
+    "level_total": LevelTotal,
+    "level_total_min": LevelTotalMin,
+    "level_total_max": LevelTotalMax,
+    "level_total_ramping": LevelTotalRamping,
+    "level_throughput": LevelThroughput,
+    "level_throughput_min": LevelThroughputMin,
+    "level_throughput_max": LevelThroughputMax,
+    "level_throughput_ramping": LevelThroughputRamping,
+    "randomize_levels": RandomizeLevels,
+    "shuffle_level_shapes": ShuffleLevelShapes,
+    "shuffle_level_quadrants": ShuffleLevelQuadrants,
+    "shuffle_level_layers": ShuffleLevelLayers,
+    "shuffle_level_subshapes": ShuffleLevelSubshapes,
+    "shuffle_level_colors": ShuffleLevelColors,
+    "random_level_total_quadrants": RandomLevelTotalQuadrants,
+    "random_level_total_layers": RandomLevelTotalLayers,
+    "random_level_total_subshapes": RandomLevelTotalSubshapes,
+    "random_level_total_colors": RandomLevelTotalColors,
+    "randomize_upgrades": RandomizeUpgrades,
+    "max_upgrade_tier": MaxUpgradeTier,
+    "randomize_upgrade_tier_cost": RandomizeUpgradeTierCost,
+    "upgrade_tier_shapes": UpgradeTierShapes,
+    "upgrade_tier_shapes_min": UpgradeTierShapesMin,
+    "upgrade_tier_shapes_max": UpgradeTierShapesMax,
+    "upgrade_tier_cost": UpgradeTierCost,
+    "upgrade_tier_cost_min": UpgradeTierCostMin,
+    "upgrade_tier_cost_max": UpgradeTierCostMax,
+    "upgrade_tier_shapes_totals_ramping": UpgradeTierShapesTotalsRamping,
+    "upgrade_tier_total_quadrants": UpgradeTierTotalQuadrants,
+    "upgrade_tier_total_layers": UpgradeTierTotalLayers,
+    "upgrade_tier_total_subshapes": UpgradeTierTotalSubshapes,
+    "upgrade_tier_total_colors": UpgradeTierTotalColors
+    # TODO: Traps
+    ## Level Total / Throughput Increase
+    ## Upgrade Tier Cost Shape Reset
+    ## Chunk Emptying Bomb
+    # TODO: EnergyLink
+    # TODO: StartInventoryPool
+}

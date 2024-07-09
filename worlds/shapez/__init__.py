@@ -1,4 +1,9 @@
 #from typing import 
+from BaseClasses import Tutorial
+from worlds.AutoWorld import World, WebWorld
+
+from .Items import ShapezItem
+from .Locations import ShapezLocation
 
 class ShapezWeb(WebWorld):
     tutorials = [Tutorial(

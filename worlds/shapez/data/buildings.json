@@ -1,0 +1,211 @@
+{
+    "rewrite_rules": {
+        "X": ["C","R","S"],
+        "Y": ["C","R","S"],
+        "Z": ["C","R","S"],
+
+        "L": ["C","R","S"],
+        "M": ["C","R","S"],
+        "N": ["C","R","S"],
+
+        "W": ["W"],
+
+        "D": ["C","R","S","W","-"],
+        "E": ["C","R","S","W","-"],
+        "F": ["C","R","S","W","-"],
+        "G": ["C","R","S","W","-"],
+
+        "H": ["C","R","S","W"],
+        "I": ["C","R","S","W"],
+        "J": ["C","R","S","W"],
+        "K": ["C","R","S","W"],
+
+        "1": ["u","r","g","b"],
+        "2": ["u","r","g","b"],
+        "3": ["u","r","g","b"],
+        "4": ["u","r","g","b"],
+
+        "5": ["u","r","g","b","y","p","c","w"],
+        "6": ["u","r","g","b","y","p","c","w"],
+        "7": ["u","r","g","b","y","p","c","w"],
+        "8": ["u","r","g","b","y","p","c","w"],
+
+        "mutual-exclusion": [ 
+            ["X","Y","Z"]
+        ]
+    },
+    "extractor": [
+            "XuXuXuXu",
+
+            "XuXuXuYu",
+            "XuXuYuXu",
+            "XuYuXuXu",
+            "YuXuXuXu",
+
+            "XuXuYuYu",
+            "XuYuYuXu",
+
+            "XuYuXuYu",
+
+            "XuYuZuXu",
+            "YuXuXuZu",
+
+            "XuYuXuZu",
+            "YuXuZuXu",
+
+            "XuXuYuZu",
+            "YuZuXuXu",
+
+            "LuMuNuWu",
+            "LuMuWuNu",
+            "LuWuMuNu",
+            "WuLuMuNu",
+
+            "RuRuWuWu"
+    ],
+    "cutter": {
+        "base" : [
+                "D*E*----",
+                "----F*G*"
+            ],
+        "quad": [
+                "D*------",
+                "--E*----",
+                "----F*--",
+                "------G*"
+            ]
+    },
+    "painter": {
+        "mixerless": {
+            "base": [
+                "DrErFrGr",
+                "DgEgFgGg",
+                "DbEbFbGb"
+            ],
+            "double": [
+                "DrErFrGr",
+                "DgEgFgGg",
+                "DbEbFbGb"
+            ],
+            "quad": [
+                "D1E2F3G4"
+            ]
+        },
+        "mixer": {
+            "base": [
+                "DrErFrGr",
+                "DgEgFgGg",
+                "DbEbFbGb",
+
+                "DyEyFyGy",
+                "DpEpFpGp",
+                "DcEcFcGc",
+
+                "DwEwFwGw"
+            ],
+            "double": [
+                "DrErFrGr",
+                "DgEgFgGg",
+                "DbEbFbGb",
+
+                "DyEyFyGy",
+                "DpEpFpGp",
+                "DcEcFcGc",
+
+                "DwEwFwGw"
+            ],
+            "quad": [
+                "D5E6F7G8"
+            ]
+
+        }
+    },
+    "rotater": {
+        "base": [
+            "G*D*E*F*"
+        ],
+        "ccw": [
+            "E*F*G*D*"
+        ],
+        "180": [
+            "F*G*D*E*"
+        ]
+    },
+    "stacker": {
+        "H*I*J*K*+D*E*F*G*": "H*I*J*K*:D*E*F*G*",
+
+        "H*I*J*--+H*E*F*G*": "H*I*J*--:H*E*F*G*",
+        "H*I*J*--+D*I*F*G*": "H*I*J*--:D*I*F*G*",
+        "H*I*J*--+D*E*J*G*": "H*I*J*--:D*E*J*G*",
+
+        "D*E*F*--+------G*": "D*E*F*G*",
+
+
+        "H*I*--K*+H*E*F*G*": "H*I*--K*:H*E*F*G*",
+        "H*I*--K*+D*I*F*G*": "H*I*--K*:D*I*F*G*",
+        "H*I*--K*+D*E*F*K*": "H*I*--K*:D*E*F*K*",
+
+        "D*E*--G*+----F*--": "D*E*F*G*",
+
+
+        "H*--J*K*+H*E*F*G*": "H*--J*K*:H*E*F*G*",
+        "H*--J*K*+D*E*J*G*": "H*--J*K*:D*E*J*G*",
+        "H*--J*K*+D*E*F*K*": "H*--J*K*:D*E*F*K*",
+
+        "D*--F*G*+--E*----": "D*E*F*G*",
+
+
+        "--I*J*K*+D*I*F*G*": "--I*J*K*:D*I*F*G*",
+        "--I*J*K*+D*E*J*G*": "--I*J*K*:D*E*J*G*",
+        "--I*J*K*+D*E*F*K*": "--I*J*K*:D*E*F*K*",
+
+        "--E*F*G*+D*------": "D*E*F*G*",
+
+
+        "H*I*----+H*E*F*G*": "H*I*----:H*E*F*G*",
+        "H*I*----+D*I*F*G*": "H*I*----:D*I*F*G*",
+
+        "D*E*----+----F*G*": "D*E*F*G*",
+
+
+        "H*--J*--+H*E*F*G*": "H*--J*--:H*E*F*G*",
+        "H*--J*--+D*E*J*G*": "H*--J*--:D*E*J*G*",
+
+        "D*--F*--+--E*--G*": "D*E*F*G*",
+
+
+        "--I*J*--+D*I*F*G*": "--I*J*--:D*I*F*G*",
+        "--I*J*--+D*E*J*G*": "--I*J*--:D*E*J*G*",
+        
+        "--E*F*--+D*----G*": "D*E*F*G*",
+
+
+        "--I*--K*+D*I*F*G*": "--I*--K*:D*I*F*G*",
+        "--I*--K*+D*E*F*K*": "--I*--K*:D*E*F*K*",
+
+        "--E*--G*+D*--F*--": "D*E*F*G*",
+        
+
+        "H*----K*+H*E*F*G*": "H*----K*:H*E*F*G*",
+        "H*----K*+D*E*F*K*": "H*----K*:D*E*F*K*",
+
+        "D*----G*+--E*F*--": "D*E*F*G*",
+
+
+        "----J*K*+D*E*J*G*": "----J*K*:D*E*J*G*",
+        "----J*K*+D*E*F*K*": "----J*K*:D*E*F*K*",
+
+        "----F*G*+D*E*----": "D*E*F*G*",
+
+
+        "H*------+H*E*F*G*": "H*------+H*E*F*G*",
+        "--I*----+D*I*F*G*": "--I*----+D*I*F*G*",
+        "----J*--+D*E*J*G*": "----J*--+D*E*J*G*",
+        "------K*+D*E*F*K*": "------K*+D*E*F*K*",
+
+        "D*------+--E*F*G*": "D*E*F*G*",
+        "--E*----+D*--F*G*": "D*E*F*G*",
+        "----F*--+D*E*--G*": "D*E*F*G*",
+        "------G*+D*E*F*--": "D*E*F*G*"
+    }
+}
